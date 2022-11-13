@@ -1,7 +1,7 @@
 const APP_ID = "appid=" + process.env.REACT_APP_API_KEY;
 
 const searchCity = (city, country) => {
-  const base = "http://api.openweathermap.org/geo/1.0/direct?";
+  const base = "https://api.openweathermap.org/geo/1.0/direct?";
   const country_ = country? "," + country : "";
   const city_ = "q=" + city + country_;
   const url = `${base}${city_}&limit=5&${APP_ID}`;
