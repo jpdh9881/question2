@@ -1,5 +1,6 @@
 {
   "name": "question2",
+  "homepage": "https://josephhaley.ca/temp_question2",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
