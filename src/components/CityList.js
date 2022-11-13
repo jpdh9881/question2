@@ -80,7 +80,7 @@ function CityList({ cityAndCountryCode, selectedCity, onSelect }) {
 CityList.propTypes = {
   cityAndCountryCode: PropTypes.array,
   selectedCity: PropTypes.object,
-  onSelect: PropTypes.func,
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default CityList;

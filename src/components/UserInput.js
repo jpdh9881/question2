@@ -42,7 +42,7 @@ function UserInput({ onChange }) {
 }
 
 UserInput.propTypes = {
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default UserInput;
