@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 function CityList({ cityAndCountryCode, selectedCity, onSelect }) {
   const [isLoading, setIsLoading] = useState(true);
   const [cities, setCities] = useState(undefined);
+  const [error, setError] = useState([false, ""]);
 
   useEffect(() => {
     if (cityAndCountryCode) {
@@ -17,7 +18,7 @@ function CityList({ cityAndCountryCode, selectedCity, onSelect }) {
           if (res.ok) {
             return res.json();
           }
-          return [];
+          throw res.json();
         })
         .then(cities => {
           if (cities) {
@@ -28,11 +29,21 @@ function CityList({ cityAndCountryCode, selectedCity, onSelect }) {
               };
             });
             setCities(withIds);
+            if (withIds.length === 1) {
+              onSelect(withIds[0]);
+            }
           } else {
             setCities(undefined);
           }
+          setError([false, ""]);
         })
-        .catch(console.log)
+        .catch(error => {
+          if (error) {
+            setError([true, error.message]);
+          } else {
+            setError([true, "Unknown error occurred."]);
+          }
+        })
         .finally(() => {
           setIsLoading(false);
         });
@@ -46,17 +57,19 @@ function CityList({ cityAndCountryCode, selectedCity, onSelect }) {
   const cityRow = (city) => {
     return (
       <ToggleButton key={city.id} value={city.id}>
-        { city.name }, { city.state }, { city.country }
+        { city.name }{ city.state && `, ${city.state}` }, { city.country }
       </ToggleButton>
     );
   };
   const View = () => {
-    if (cities === undefined) {
+    if (error[0]) {
+      return <div className="text-white bg-red-200 p-2 rounded text-center">{error}</div>;
+    } else if (cities === undefined) {
       return <div></div>;
     } else if (cities.length > 0) {
       return (
         <ToggleButtonGroup
-        className="w-full"
+          className="w-full"
           orientation="vertical"
           value={selectedCity?.id}
           exclusive
@@ -66,7 +79,7 @@ function CityList({ cityAndCountryCode, selectedCity, onSelect }) {
         </ToggleButtonGroup>
       );
     } else {
-      return <div>No cities!</div>;
+      return <div>No cities were found</div>;
     }
   }
 
